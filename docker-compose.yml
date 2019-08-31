@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  rails:
+    build: .
+    image: wilson0611/ubuntu-rails-ssh
+    volumes:
+      - ./projects:/home/app/projects
+    ports:
+      - "3000:3000"
+      - "3022:22"
+    depends_on:
+      - db
+    networks:
+      - my_network
+  db:
+    image: postgres:9.6
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    ports:
+      - "5000:5432"
+    networks:
+      my_network:
+        aliases:
+          - pgsql
+
+networks:
+  my_network:
